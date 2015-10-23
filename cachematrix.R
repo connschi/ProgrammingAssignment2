@@ -1,11 +1,11 @@
-## A collection of functions to cache potentially time-consuming
-## computations and a function to demostrate how the caching functions
-## are used. The example function will assigned to the variable 
-## cacheSolve and will return the inverse of a matrix
+# The purpose of this file is to optimize is to do 
+# the inversion of matrix only once.  The operation 
+# will done by creating a Matrix type that can cache 
+# the inverse of itself.
 
- 
 #
-# Create a datastructure that can set/get the matrix and its inverse.
+# Create a datastructure that can set/get the matrix 
+# and its inverse.
 #
 makeCacheMatrix <- function(x = matrix()) {
   inverseMatrix <- NULL
@@ -21,40 +21,17 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 #
-# Create a datastructure that will set/get a vector and/or mean
+# A fucntion that will return the inverse of the 
+# matrix
 #
-makeVector <- function(x = numeric()) {
-  m <- NULL
-  set <- function(y) {
-    x <<- y
-    m <<- NULL
-  }
-  get <- function() x
-  setmean <- function(mean) m <<- mean
-  getmean <- function() m
-  list(set = set, get = get,
-  setmean = setmean,
-  getmean = getmean)
-}
-
+# If the inverse has been stored in the cacheMatrix 
+# the inverse will be retruned
 #
-# 1.  If the mean has been set then the mean
-# 2.  If the mean has not been set then calculate the mean, store it and return it.
+# If the inverse has not been store in the cacheMatrix
+# then the inverse will be calculated, store in the 
+# cacheMatrix and retured to the user.
 #
-cachemean <- function(x, ...) {
-  m <- x$getmean()
-  if(!is.null(m)) {
-  message("getting cached data")
-  return(m)
-  }
-  data <- x$get()
-  m <- mean(data, ...)
-  x$setmean(m)
-  m
-}
-
-## An exmple function show how to the makeCacheMatrix function.
-## It will accept a matrix and return the inverse of a matrix. 
+#
 cacheSolve <- function(x, ...) {
   inverseMatrix <- x$getInverseMatrix()
   if(!is.null(inverseMatrix)) {
@@ -69,9 +46,11 @@ cacheSolve <- function(x, ...) {
 }
 
 #########################################################################
+## Functions used to understand the assignment                         ##
+#########################################################################
 
 ##
-## Study the makeMaxtrix
+## A routine to verify that the 
 ##
 testCase3 <- function() {
   testCase3 <- makeCacheMatrix()
@@ -85,17 +64,17 @@ testCase3 <- function() {
   #print(element1)
   #print(element2)
 
-
   testCase3$set(element1)
   testCase3$setInverseMatrix(element2)
-  print(testCase3$get())
-  print(testCase3$getInverseMatrix())
+  #print(testCase3$get())
+  #print(testCase3$getInverseMatrix())
   
   
 }
 
 ##
-## Study the solve function 
+## Study the solve function to invert a matrix.  Note that
+## I multiply them together to get the identity matrix.
 ##
 testCase2 <- function() {
   sourceMatrix <- matrix(c(4,3,3,2), nrow = 2, ncol = 2)
@@ -111,7 +90,7 @@ testCase2 <- function() {
 }
 
 ##
-## Study the output of make vector
+## Study the output of makeVector to learn how to set/get a vector/mean.
 ## 
 testCase1 <- function() {
   
@@ -126,6 +105,45 @@ testCase1 <- function() {
   #print("+++++++++++++++++++++++")
   #print(str(testCase1$getmean()))
   #print("-----------------------")
+}
+
+##########################################
+## Original Source Code provided by     ##
+## the professors.                      ##
+##########################################
+
+#
+# Create a datastructure that will set/get a vector and/or mean
+#
+makeVector <- function(x = numeric()) {
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setmean <- function(mean) m <<- mean
+  getmean <- function() m
+  list(set = set, get = get,
+       setmean = setmean,
+       getmean = getmean)
+}
+
+#
+# 1.  If the mean has been set then the mean
+# 2.  If the mean has not been set then calculate the mean, 
+#     store it and return it.
+#
+cachemean <- function(x, ...) {
+  m <- x$getmean()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  m <- mean(data, ...)
+  x$setmean(m)
+  m
 }
 
 
