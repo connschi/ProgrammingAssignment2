@@ -1,47 +1,107 @@
-# The purpose of this file is to optimize is to do 
-# the inversion of matrix only once.  The operation 
-# will done by creating a Matrix type that can cache 
-# the inverse of itself.
+## The purpose of this file is to optimize is to do 
+## the inversion of matrix only once.  The operation 
+## will done by creating a Matrix type that can cache 
+## the inverse of itself.
 
-#
-# Create a datastructure that can set/get the matrix 
-# and its inverse.
-#
-makeCacheMatrix <- function(x = matrix()) {
-  inverseMatrix <- NULL
-  set <- function(m) {
+##
+## Create a datastructure that allow the 
+## create of a list of functions that the
+## developer can set/get the matrix and
+## its inverse.
+##
+## Each time this function is called it 
+## creates different setter/getter so 
+## there can matrix caches with different
+## values
+##
+makeCacheMatrix <- function() {
+  
+  #
+  # Store the matrix in the globlal environment
+  # so the variable exist when the function has
+  # finished executing and goes out of scope.
+  # 
+  set <- function(m) 
+  {
     x <<- m
+    inverseMatrix <<- NULL
   }
-  get <- function() x
-  setInverseMatrix <- function(matrix) inverseMatrix <<- matrix
-  getInverseMatrix <- function() inverseMatrix
-  list(set = set, get = get,
+  
+  #
+  # Retrieves the matrix from the global environment
+  #
+  get <- function() 
+  {
+    x
+  }
+
+  #
+  #
+  # Store the inverse matrix in the globlal environment
+  # so the variable exist when the function has
+  # finished executing and goes out of scope.
+  # 
+  # 
+  setInverseMatrix <- function(matrix) 
+  {
+    inverseMatrix <<- matrix
+  }
+  
+  #
+  # Retrieve the matrix from the global environment.
+  #
+  getInverseMatrix <- function() 
+  {
+    inverseMatrix
+  }
+  
+  #
+  # Creates a list of name, functions ( name = set, function= set)
+  # that the developer can call by accessing them using the variable$name
+  # 
+  # The list 
+  list(set = set, 
+       get = get,
        setInverseMatrix = setInverseMatrix,
        getInverseMatrix = getInverseMatrix)
 }
 
-#
-# A fucntion that will return the inverse of the 
-# matrix
-#
-# If the inverse has been stored in the cacheMatrix 
-# the inverse will be retruned
-#
-# If the inverse has not been store in the cacheMatrix
-# then the inverse will be calculated, store in the 
-# cacheMatrix and retured to the user.
-#
-#
-cacheSolve <- function(x, ...) {
+##
+## A fucntion that will return the inverse of the 
+## matrix
+##
+## If the inverse has been stored in the cacheMatrix 
+## the inverse will be retruned
+##
+## If the inverse has not been store in the cacheMatrix
+## then the inverse will be calculated, store in the 
+## cacheMatrix and retured to the user.
+##
+##
+cacheSolve <- function(x, ...) 
+{
+  #
+  # If the variable contains the inverse maxtrix
+  #   1. return the inverse matrix 
+  #
   inverseMatrix <- x$getInverseMatrix()
-  if(!is.null(inverseMatrix)) {
+  if(!is.null(inverseMatrix)) 
+  {
     message("getting cached data")
     return(inverseMatrix)
   }
   
+  #
+  # If the inverse matrix does not exist
+  #    1. calculate the inverse matrix
+  #    2. store the matrix so that if save variable 
+  #       is used then it does need to be calculated.
+  #    3. return the inverse matrix.
+  #
   matrix <- x$get()
   inverseMatrix <- solve(matrix)
   x$setInverseMatrix(inverseMatrix)
+  
   inverseMatrix
 }
 
@@ -144,6 +204,6 @@ cachemean <- function(x, ...) {
   m <- mean(data, ...)
   x$setmean(m)
   m
-}
+}         
 
 
