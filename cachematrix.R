@@ -1,18 +1,16 @@
-## The purpose of this file is to optimize is to do 
-## the inversion of matrix only once.  The operation 
-## will done by creating a Matrix type that can cache 
-## the inverse of itself.
+## The purpose of this file is to optimize a matrix
+## inversion by doing the inversion only one and caching
+## the result. 
 
 ##
-## Create a datastructure that allow the 
-## create of a list of functions that the
-## developer can set/get the matrix and
+## Create of a list of functions that the
+## developer can set and get the matrix and
 ## its inverse.
 ##
 ## Each time this function is called it 
 ## creates different setter/getter so 
-## there can matrix caches with different
-## values
+## there can be different matrix caches 
+## with different values
 ##
 makeCacheMatrix <- function() {
   
@@ -48,7 +46,7 @@ makeCacheMatrix <- function() {
   }
   
   #
-  # Retrieve the matrix from the global environment.
+  # Retrieve the inverse matrix from the global environment.
   #
   getInverseMatrix <- function() 
   {
@@ -74,14 +72,13 @@ makeCacheMatrix <- function() {
 ## the inverse will be retruned
 ##
 ## If the inverse has not been store in the cacheMatrix
-## then the inverse will be calculated, store in the 
-## cacheMatrix and retured to the user.
-##
+## then the inverse will be calculated, stored in x (
+## fromal parameter ) and retured to the user.
 ##
 cacheSolve <- function(x, ...) 
 {
   #
-  # If the variable contains the inverse maxtrix
+  # If the inverse maxtrix exists
   #   1. return the inverse matrix 
   #
   inverseMatrix <- x$getInverseMatrix()
@@ -110,7 +107,7 @@ cacheSolve <- function(x, ...)
 #########################################################################
 
 ##
-## A routine to verify that the 
+## A routine to verify that the makeCacheMatrix is working
 ##
 testCase3 <- function() {
   testCase3 <- makeCacheMatrix()
